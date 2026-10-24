@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تسجيل بلاغ قطوعات الكهرباء</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{font-family:Tahoma;background:#f0f2f5;padding:20px}
+.card{max-width:550px;margin:auto;background:#fff;padding:25px;border-radius:15px;box-shadow:0 2px 15px #0002}
+h2{text-align:center;color:#f59e0b}
+input,textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+button{width:100%;padding:13px;background:#f59e0b;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
+a{display:block;text-align:center;margin-top:15px;color:#333}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>⚡ بلاغ قطوعات الكهرباء</h2>
+<input id="name" placeholder="الاسم *">
+<input id="meter" placeholder="رقم العداد *">
+<input id="address" placeholder="العنوان *">
+<input id="phone" placeholder="رقم الهاتف *">
+<input type="date" id="date">
+<textarea id="location" placeholder="الموقع بالتفصيل *"></textarea>
+<button onclick="sendReport()">إرسال البلاغ</button>
+<p id="msg" style="text-align:center"></p>
+<a href="admin.html">دخول الأدمن 👨‍💼</a>
+</div>
+<script>
+const SUPABASE_URL = "https://lnkxakptqqyrrqmfnpoe.supabase.co";
+const SUPABASE_KEY = "sb_publishable_eYODW4rFLkBWmCYxWA5aNA_FS5Munx1";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+async function sendReport(){
+  const data = { name: document.getElementById('name').value, meter_number: document.getElementById('meter').value, address: document.getElementById('address').value, phone: document.getElementById('phone').value, report_date: document.getElementById('date').value, location: document.getElementById('location').value };
+  if(!data.name || !data.meter_number || !data.address || !data.phone || !data.location){ alert("املأ كل الحقول"); return; }
+  const { error } = await supabase.from('reports').insert([data]);
+  if(error) alert("خطأ: " + error.message);
+  else { document.getElementById('msg').innerText = "✅ تم إرسال بلاغك بنجاح"; document.querySelectorAll('input,textarea').forEach(e=>e.value=''); }
+}
+</script>
+</body>
+                                                          </html>
